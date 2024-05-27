@@ -12,6 +12,7 @@ import Project from './pages/project/Project';
 import Navbar from './components/Navbar';
 import RequireNotAuth from './guards/RequireNotAuth';
 import RequireAuth from './guards/RequireAuth';
+import { useAuthContext } from './hooks/useAuthContext';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,9 +31,12 @@ const router = createBrowserRouter(
 )
 
 function App() {
+  const { authIsReady } = useAuthContext();
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      {authIsReady && (
+        <RouterProvider router={router} />
+      )}
     </div>
   );
 }

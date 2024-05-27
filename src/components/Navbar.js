@@ -1,17 +1,21 @@
 import { Link, Outlet } from "react-router-dom"
 import './Navbar.css';
 import Temple from '../assets/temple.svg';
-import DashboardIcon from '../assets/dashboard_icon.svg';
-import AddIcon from '../assets/add_icon.svg';
+// import DashboardIcon from '../assets/dashboard_icon.svg';
+// import AddIcon from '../assets/add_icon.svg';
 import Sidebar from "./Sidebar";
 import { useLogout } from '../hooks/useLogout';
+import { useAuthContext } from "../hooks/useAuthContext";
+import OnlineUsers from "./OnlineUsers";
 
 
 export default function Navbar() {
   const { logout, isPending } = useLogout();
+  const { user } = useAuthContext();
   return (
     <>
-    <Sidebar />
+    {user && <Sidebar />}
+    {user && <OnlineUsers />}
     <div className="navbar">
         <ul>
             <li className='logo'>
@@ -30,14 +34,20 @@ export default function Navbar() {
               <span>New Project</span>
               </Link>
             </li> */}
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Signup</Link></li>
-            <li>
-              {!isPending && <button className="btn" onClick={logout}>Logout</button>}
-              {isPending && <button className="btn" onClick={logout} disabled>Logging out...</button>}
-
-            </li>
+            {!user && (
+              <>
+              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/signup">Signup</Link></li>
+              </>
+            )}
+            {user && (
+              <li>
+                {<button className="btn" onClick={logout}>Logout</button>}
+                {/* {isPending && <button className="btn" onClick={logout} disabled>Logging out...</button>} */}
+              </li>
+            )}
         </ul>
+        
         
         <Outlet />
         
